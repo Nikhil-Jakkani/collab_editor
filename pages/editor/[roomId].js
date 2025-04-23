@@ -101,7 +101,6 @@ export default function EditorPage() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
     const [lastSaved, setLastSaved] = useState(null);
-    const editorRef = useRef(null);
 
     // Initialize socket connection when component mounts
     useEffect(() => {
@@ -135,7 +134,6 @@ export default function EditorPage() {
         });
 
         socket.on("room-users", (roomUsers) => {
-            setUsers(roomUsers);
             // Show toast when a new user joins
             if (roomUsers.length > users.length) {
                 const newUser = roomUsers.find(user => !users.includes(user));
@@ -143,6 +141,7 @@ export default function EditorPage() {
                     toast.success(`${newUser} joined the room`);
                 }
             }
+            setUsers(roomUsers);
         });
 
         // Clean up on unmount
@@ -191,7 +190,7 @@ export default function EditorPage() {
             } else {
                 toast.error("Failed to copy: " + text);
             }
-        } catch (err) {
+        } catch (_) {
             toast.error("Failed to copy: " + text);
         }
 
@@ -204,7 +203,7 @@ export default function EditorPage() {
             localStorage.setItem(`code-collab-${roomId}`, code);
             setLastSaved(new Date());
             toast.success("Code saved to browser storage");
-        } catch (error) {
+        } catch (_) {
             toast.error("Failed to save code");
         }
     };
