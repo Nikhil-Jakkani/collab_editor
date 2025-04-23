@@ -62,7 +62,7 @@
 // collab_editor/pages/editor/[roomId].js
 
 import { useRouter } from "next/router";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import dynamic from "next/dynamic";
 import { toast } from "react-hot-toast";
@@ -134,14 +134,16 @@ export default function EditorPage() {
         });
 
         socket.on("room-users", (roomUsers) => {
-            // Show toast when a new user joins
-            if (roomUsers.length > users.length) {
-                const newUser = roomUsers.find(user => !users.includes(user));
-                if (newUser && newUser !== username) {
-                    toast.success(`${newUser} joined the room`);
+            setUsers(prevUsers => {
+                // Show toast when a new user joins
+                if (roomUsers.length > prevUsers.length) {
+                    const newUser = roomUsers.find(user => !prevUsers.includes(user));
+                    if (newUser && newUser !== username) {
+                        toast.success(`${newUser} joined the room`);
+                    }
                 }
-            }
-            setUsers(roomUsers);
+                return roomUsers;
+            });
         });
 
         // Clean up on unmount
@@ -190,7 +192,7 @@ export default function EditorPage() {
             } else {
                 toast.error("Failed to copy: " + text);
             }
-        } catch (_) {
+        } catch {
             toast.error("Failed to copy: " + text);
         }
 
@@ -203,7 +205,7 @@ export default function EditorPage() {
             localStorage.setItem(`code-collab-${roomId}`, code);
             setLastSaved(new Date());
             toast.success("Code saved to browser storage");
-        } catch (_) {
+        } catch {
             toast.error("Failed to save code");
         }
     };
