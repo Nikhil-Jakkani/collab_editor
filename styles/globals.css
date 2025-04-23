@@ -1,20 +1,231 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles with cross-browser compatibility */
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   margin: 0;
   padding: 0;
-  text-align: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease;
 }
-input {
-  margin: 10px;
-  padding: 8px;
+
+/* Text gradients */
+.text-gradient-purple {
+  background: linear-gradient(to right, #c084fc, #a855f7, #7e22ce);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 2s infinite linear;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(to right, #3b82f6, #2563eb, #1d4ed8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Animated background */
+.bg-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating shapes animation */
+.floating-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.2;
+  filter: blur(40px);
+}
+
+.shape1 {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
+  top: -100px;
+  left: -100px;
+  animation: float1 15s ease-in-out infinite alternate;
+}
+
+.shape2 {
   width: 200px;
+  height: 200px;
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  top: 60%;
+  right: -50px;
+  animation: float2 20s ease-in-out infinite alternate;
 }
+
+.shape3 {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(to right, #8b5cf6, #6366f1);
+  bottom: -100px;
+  left: 30%;
+  animation: float3 18s ease-in-out infinite alternate;
+}
+
+.shape4 {
+  width: 180px;
+  height: 180px;
+  background: linear-gradient(to right, #6366f1, #4f46e5);
+  top: 20%;
+  left: 70%;
+  animation: float4 12s ease-in-out infinite alternate;
+}
+
+@keyframes float1 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(100px, 100px) rotate(90deg); }
+}
+
+@keyframes float2 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-80px, -80px) rotate(-90deg); }
+}
+
+@keyframes float3 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(70px, -70px) rotate(60deg); }
+}
+
+@keyframes float4 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-50px, 50px) rotate(-60deg); }
+}
+
+/* Button hover effects */
 button {
-  padding: 10px;
-  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
-#editor {
-  margin: 0 auto;
-  width: 80%;
-  height: 500px;
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+button:focus:not(:active)::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scale(25, 25);
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40, 40);
+  }
+}
+
+/* Cross-browser input styles */
+input, select, textarea {
+  font-family: inherit;
+  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* CodeMirror editor customizations */
+.cm-editor {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  height: 100% !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .cm-editor {
+    font-size: 13px;
+  }
+}
+
+/* Ensure proper scrolling on all browsers */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
